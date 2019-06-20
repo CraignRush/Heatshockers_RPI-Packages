@@ -53,12 +53,17 @@ cd raspberry-pi-package
 3. Install modules and documententation:
 `sudo apt-get install qtcreator qt5-image-formats-plugins qtmultimedia5-dev qtx11extras5-doc qtgraphicaleffects5-doc`
 4. Install QtCharts and compile them for yourself:
+```shell 
+git clone https://github.com/qt/qtcharts.git -b 5.7
+cd qtcharts
+qmake -r
+sudo make -j4
+sudo make install
+```
+
 ```shell
 git clone https://github.com/qt/qt5.git -b 5.7
-
-
 ./configure -prefix $PWD/qtbase -opensource -confirm-license
-
 cd <ModuleFolder>/<version>
 qmake -r
 sudo make -j4 module-<YourModule>
@@ -66,13 +71,42 @@ sudo make install
 ```
 5. Install required Modules (use the code from 4. with this link and directory)
 
+TODO: QtCreator Resolution
+Kits? 
+compiler and qt?
+
+
 
 #### 1.2.1 "Display-Pi"
 ---
 For the RPi connected to the display continue with:
 1. Install the GUI 
 `sudo apt-get install -y raspberrypi-ui-mods rpi-chromium-mods`
+#2. Install another Display Manager (LightDM doesn't supply you with a virtual keyboard)
+https://askubuntu.com/questions/829108/what-is-gdm3-kdm-lightdm-how-to-install-and-remove-them
+3. Install Display Drivers
+ ```shell
+git clone https://github.com/pimoroni/hyperpixel4
+cd hyperpixel4
+sudo ./install.sh
+```
+180 Degree Rotation
+Note: You must build the latest dtoverlay file to enable rotation support:
+Go into src
+run make to build a new hyperpixel4.dtbo with rotation support
+copy the overlay with sudo cp hyperpixel4.dtbo /boot/overlays/
+
+To rotate your HyperPixel4 you must edit /boot/config.txt and change the following lines:
+
+  ```
+    Change dtoverlay=hyperpixel4 to dtoverlay=hyperpixel4:rotate
+    Change display_rotate=3 to display_rotate=1
+    ```
+This will rotate both the display and the touchscreen input to match.
+
+If you're using a non-touchscreen HyperPixel4 you need only change display_rotate.
 2. Restart the Pi (sudo restart)
+x. Clone Guiproject from `https://gitlab.lrz.de/philipdachs/heatshockersgui.git`
 
 
 
